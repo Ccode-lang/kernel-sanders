@@ -1,7 +1,7 @@
 #include <efi.h>
 #include <efilib.h>
 
-void * malloc(UINTN poolSize)
+void * uefi_malloc(UINTN poolSize)
 {
     EFI_STATUS status;
     void * handle;
@@ -25,7 +25,7 @@ void * malloc(UINTN poolSize)
     }
 }
 
-void free(void * pool)
+void uefi_free(void * pool)
 {
     EFI_STATUS status;
     Print(L"freeing memory pool\n");

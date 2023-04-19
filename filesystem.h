@@ -1,6 +1,17 @@
 #include <efi.h>
 #include <efilib.h>
-#include "memory.h"
+//#include "memory.h"
+
+UINT64 FileSize(EFI_FILE_HANDLE FileHandle)
+{
+  UINT64 ret;
+  EFI_FILE_INFO       *FileInfo;         /* file information structure */
+  /* get the file's size */
+  FileInfo = LibFileInfo(FileHandle);
+  ret = FileInfo->FileSize;
+  FreePool(FileInfo);
+  return ret;
+}
 
 EFI_FILE_HANDLE GetVolume(EFI_HANDLE image)
 {
@@ -18,7 +29,7 @@ EFI_FILE_HANDLE GetVolume(EFI_HANDLE image)
     return Volume;
 }
 
-void *ReadFileTooBuffer(CHAR16 *FileName)
+void *ReadFileTooBuffer(CHAR16 *FileName, EFI_FILE_HANDLE Volume)
 {
     EFI_FILE_HANDLE FileHandle;
 
@@ -26,7 +37,7 @@ void *ReadFileTooBuffer(CHAR16 *FileName)
     uefi_call_wrapper(Volume->Open, 5, Volume, &FileHandle, FileName, EFI_FILE_MODE_READ, EFI_FILE_READ_ONLY | EFI_FILE_HIDDEN | EFI_FILE_SYSTEM);
 
     UINT64 ReadSize = FileSize(FileHandle);
-    UINT8 *Buffer = malloc(ReadSize);
+    UINT8 *Buffer = uefi_malloc(ReadSize);
 
     uefi_call_wrapper(FileHandle->Read, 3, FileHandle, &ReadSize, Buffer);
 
