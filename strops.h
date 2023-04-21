@@ -7,7 +7,7 @@ BOOLEAN StartsWith(CHAR16 *string, CHAR16 *compare, UINT64 size)
     {
         if (string[i] != compare[i])
         {
-            return TRUE;
+            return FALSE;
         }
     }
     return TRUE;

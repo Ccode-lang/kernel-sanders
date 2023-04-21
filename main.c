@@ -23,6 +23,7 @@ int ReadLine(CHAR16 *buf, int l)
             {
                 if (i)
                     i--;
+                Print(L"\b");
                 buf[i] = 0;
                 continue;
             }
@@ -64,30 +65,32 @@ efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable)
     CHAR16 CommandBuffer[256] = L"";
 
     void *tmp;
+    BOOLEAN running = TRUE;
 
     Print(L">");
-    while (1)
+    while (running)
     {
         ReadLine(CommandBuffer, 256);
         if (StrCmp(CommandBuffer, L"!test\0") == 0)
         {
             Print(L"Test\n");
         }
-        else if (StartsWith(CommandBuffer, L"!echo ", 6)){
+        else if (StartsWith(CommandBuffer, L"!echo ", 6))
+        {
             tmp = Strip(CommandBuffer, 6);
             Print((CHAR16 *)tmp);
             Print(L"\n");
+        }
+        else if (StrCmp(CommandBuffer, L"!exit\0") == 0)
+        {
+            Print(L"Test");
+            running = FALSE;
         }
         else
         {
             Print(L"Unknown command.\n");
         }
         Print(L">");
-    }
-
-    while (1)
-    {
-        ;
     }
 
     return EFI_SUCCESS;
