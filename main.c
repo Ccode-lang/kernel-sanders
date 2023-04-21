@@ -1,5 +1,6 @@
 #include <efi.h>
 #include <efilib.h>
+#include "strops.h"
 #include "memory.h"
 #include "filesystem.h"
 
@@ -62,14 +63,20 @@ efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable)
     EFI_INPUT_KEY Key;
     CHAR16 CommandBuffer[256] = L"";
 
-    Print(L">");
+    void *tmp;
 
+    Print(L">");
     while (1)
     {
         ReadLine(CommandBuffer, 256);
         if (StrCmp(CommandBuffer, L"!test\0") == 0)
         {
             Print(L"Test\n");
+        }
+        else if (StartsWith(CommandBuffer, L"!echo ", 6)){
+            tmp = Strip(CommandBuffer, 6);
+            Print((CHAR16 *)tmp);
+            Print(L"\n");
         }
         else
         {
