@@ -88,7 +88,18 @@ efi_main(EFI_HANDLE ImageHandle, EFI_SYSTEM_TABLE *SystemTable)
         }
         else
         {
-            Print(L"Unknown command.\n");
+            StrCat(CommandBuffer, L".efi");
+            if (FileExists(CommandBuffer, Volume))
+            {
+                void *buffer = ReadFileTooBuffer(CommandBuffer, Volume);
+                void (*command)(void) = (void (*)())buffer;
+                command();
+                uefi_free(buffer);
+            }
+            else
+            {
+                Print(L"Unknown command.\n");
+            }
         }
         Print(L">");
     }

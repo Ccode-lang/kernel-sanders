@@ -49,11 +49,17 @@ void *ReadFileTooBuffer(CHAR16 *FileName, EFI_FILE_HANDLE Volume)
 
 BOOLEAN FileExists(CHAR16 *FileName, EFI_FILE_HANDLE Volume)
 {
-  char *buffer = ReadFileTooBuffer(FileName, Volume);
+  CHAR16 *buffer = ReadFileTooBuffer(FileName, Volume);
+  
 
-  if (buffer[0] == '\0') {
-    return 1;
-  } else {
-    return 0;
+  if (buffer[0] != '\0')
+  {
+    uefi_free(buffer);
+    return TRUE;
+  }
+  else
+  {
+    uefi_free(buffer);
+    return FALSE;
   }
 }
