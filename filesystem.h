@@ -46,3 +46,14 @@ void *ReadFileTooBuffer(CHAR16 *FileName, EFI_FILE_HANDLE Volume)
 
   return Buffer;
 }
+
+BOOLEAN FileExists(CHAR16 *FileName, EFI_FILE_HANDLE Volume)
+{
+  char *buffer = ReadFileTooBuffer(FileName, Volume);
+
+  if (buffer[0] == '\0') {
+    return 1;
+  } else {
+    return 0;
+  }
+}
